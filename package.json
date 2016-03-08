@@ -1,0 +1,19 @@
+{
+  "name": "bender_the_bartender",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wabeeler/bender_the_bartender.git"
+  },
+  "author": "Brad Beeler",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wabeeler/bender_the_bartender/issues"
+  },
+  "homepage": "https://github.com/wabeeler/bender_the_bartender#readme"
+}
