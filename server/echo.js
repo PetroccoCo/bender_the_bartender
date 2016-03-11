@@ -59,14 +59,17 @@ alexaApp.intent("drinkIntent",
       //  Error
       drinkOrderMessageHandler(drink)
         .then(function domhSuccess(message) {
+          console.log("Domh success");
             response.say("Okay, I'll make you a " + drink);
           },
           function domhError(error) {
+            console.log("domhError");
             switch(error) {
               case 'pouring':
                 message = "Hold your bits, Bender is pouring a drink";
                 break;
               case 'error':
+              default:
                 message = "Shit! Something broke";
                 break;
             }
@@ -127,11 +130,17 @@ function drinkOrderMessageHandler(drink) {
   _socket.emit('drinkOrder', drink);
 
   _socket.on('benderResponse', function benderResponseHandler(reponse) {
+    console.log("removing response listener");
     _socket.off('benderResponse');
-    if(reponse == 'success')
+    console.log("removing response listener 2");
+    if(reponse == 'success'){
+      console.log("resolving");
       _defer.resolve(response);
-    else
+    }
+    else{
+      console.log("rejecting");
       _defer.reject(response);
+    }
   });
 
   return _defer.promise.timeout( 5000, "error" );

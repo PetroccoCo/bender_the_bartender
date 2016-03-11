@@ -5,6 +5,15 @@ console.log('1');
 var io = require('socket.io-client');
 var socket = io.connect('https://ec2-52-201-222-163.compute-1.amazonaws.com', {reconnect: true});
 
+var drinksMenu = [
+  "gin",
+  "gin and tonic",
+  "gin martini",
+  "vodka",
+  "vodka martini",
+  "vodka tonic"
+];
+
 console.log('2');
 
 // Add a connect listener
@@ -21,6 +30,10 @@ socket.on('message', function(message) {
   catch(ex) {
     console.log("Error Parsing Message", ex);
   }
+});
+
+socket.on('drinkOrder', function(drink) {
+  console.log("Recieved drink order for " + drink);
 });
 
 setTimeout(function() {
