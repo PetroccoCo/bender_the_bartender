@@ -33,12 +33,14 @@ alexaApp.express(app, "/echo/");
 if( process.env.ssl == 'enabled' ) {
   var https = require('https');
   var fs = require('fs');
+//  var privateKey  = fs.readFileSync('../ssl_certs/private-key.pem', 'utf8');
+//  var certificate = fs.readFileSync('../ssl_certs/certificate.pem', 'utf8');
   var privateKey  = fs.readFileSync('../ssl_certs/private-key.pem', 'utf8');
   var certificate = fs.readFileSync('../ssl_certs/certificate.pem', 'utf8');
 
   var credentials = {key: privateKey, cert: certificate};
 
-  var httpsServer = https.createServer(app)
+  var httpsServer = https.createServer(credentials, app);
 
   httpsServer.listen(443);
   console.log("Listneing on https 443");
