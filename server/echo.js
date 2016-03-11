@@ -67,6 +67,11 @@ alexaApp.intent("drinkIntent",
           function domhError(error) {
             var message = '';
 
+            if(error.hasOwnProperty('code') && error.code === 'ETIMEDOUT') {
+              console.log("resetting error timeout");
+              error = 'timeout';
+            }
+
             switch(error) {
               case 'timeout':
                 // it appers on a timeout that the promise is left in a pendig state, 
@@ -93,7 +98,6 @@ alexaApp.intent("drinkIntent",
         );
     }
     else {
-      console.log("dont know how");
       response.say("Sorry, I don't know how to make a " + drink).send();
     }
     return false;
