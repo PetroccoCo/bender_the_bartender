@@ -9,6 +9,10 @@
   "author": "Brad Beeler",
   "license": "ISC",
   "dependencies": {
+    "alexa-app": "^2.3.2",
+    "body-parser": "^1.15.0",
+    "ejs": "^2.4.1",
+    "express": "^4.13.4",
     "socket.io": "^1.4.5"
   }
 }
