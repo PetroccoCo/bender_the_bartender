@@ -9,6 +9,7 @@
   "author": "Brad Beeler",
   "license": "ISC",
   "dependencies": {
+    "q": "^1.4.1",
     "socket.io-client": "^1.4.5"
   }
 }

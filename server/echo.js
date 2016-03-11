@@ -132,7 +132,23 @@ if( process.env.ssl == 'enabled' ) {
     _socket.on('disconnect', function() {
       console.log('Client disconnected.');
     });
-  });
+
+
+    _socket.on('benderResponse', function benderResponseHandler(response) {
+      console.log("removing response listener");
+      //_socket.off('benderResponse');
+      console.log("removing response listener 2");
+      if(response == 'okay'){
+        console.log("resolving");
+        _defer.resolve(response);
+      }
+      else{
+        console.log("rejecting");
+        _defer.reject(response);
+      }
+    });
+
+  }); // end connection function
 }
 
 var httpServer = http.createServer(app);
@@ -142,20 +158,6 @@ console.log("Listening on port "+PORT);
 function drinkOrderMessageHandler(drink) {
   _defer = q.defer();
   _socket.emit('drinkOrder', drink);
-
-  _socket.on('benderResponse', function benderResponseHandler(reponse) {
-    console.log("removing response listener");
-    _socket.off('benderResponse');
-    console.log("removing response listener 2");
-    if(reponse == 'okay'){
-      console.log("resolving");
-      _defer.resolve(response);
-    }
-    else{
-      console.log("rejecting");
-      _defer.reject(response);
-    }
-  });
 
   return _defer.promise.timeout( 30000, "timeout" );
 }

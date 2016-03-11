@@ -4,6 +4,7 @@ console.log('1');
 // Connect to server
 var io = require('socket.io-client');
 var socket = io.connect('https://ec2-52-201-222-163.compute-1.amazonaws.com', {reconnect: true});
+var q = require('q');
 
 var drinksMenu = [
   "gin",
@@ -39,9 +40,13 @@ socket.on('drinkOrder', function(drink) {
     return;
   }
 
-  if( drinkMenu.indexOf(drink.toLowerCase()) >= 0) {
+  if( drinksMenu.indexOf(drink.toLowerCase()) >= 0) {
     _pouring = true;
     socket.emit('benderResponse', 'okay');
+    pourDrink(drink)
+      .then(function(response) {
+        _pouring = false;
+      });
   }
   else {
     socket.emit('benderResponse', 'error');
@@ -53,4 +58,13 @@ setTimeout(function() {
     socket.send('client message sent');
   }, 1500);
 
-console.log('3');
+function pourDrink(drink) {
+  var defer = q.defer();
+
+  setTimeout(function() {
+    defer.resolve('okay');
+  }, 5000);
+
+  return defer.promise;
+}
+
