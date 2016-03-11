@@ -43,7 +43,12 @@ alexaApp.intent("drinkIntent",
     console.log("Drink is", drink, drinksMenu.indexOf(drink.toLowerCase()));
 
     if( _socket === undefined || _socket.conn.disconnected) {
-      response.say("Sorry there is no bender to get your drink");
+      response.say("Sorry there is no Bender to get your drink");
+      return;
+    }
+
+    if (_defer.promise.inspect().state === 'pending') {
+      response.say("Sorry, Bender is busy taking another order");
       return;
     }
 
@@ -53,8 +58,22 @@ alexaApp.intent("drinkIntent",
       //  Success
       //  Pooring
       //  Error
-      _socket.send(JSON.stringify({"drink": drink}));
-      response.say("Okay, I'll make you a " + drink);
+      drinkOrderMessageHandler(drink)
+        .then(function domhSuccess(message) {
+            response.say("Okay, I'll make you a " + drink);
+          },
+          function domhError(error) {
+            switch(error) {
+              case 'pouring':
+                message = "Hold your bits, Bender is pouring a drink";
+                break;
+              case 'error':
+                message = "Shit! Something broke";
+                break;
+            }
+            response.say(message);
+          }
+        );
     }
     else {
       response.say("Sorry, I don't know how to make a " + drink);
@@ -104,22 +123,16 @@ var httpServer = http.createServer(app);
 httpServer.listen(PORT);
 console.log("Listening on port "+PORT);
 
-/*
-var fs = require('fs');
-var http = require('http');
-var https = require('https');
-var privateKey  = fs.readFileSync('sslcert/server.key', 'utf8');
-var certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
+function drinkOrderMessageHandler(drink) {
+  _socket.emit('drinkOrder', drink);
 
-var credentials = {key: privateKey, cert: certificate};
-var express = require('express');
-var app = express();
+  _socket.on('benderResponse', function benderResponseHandler(reponse) {
+    _socket.off('benderResponse');
+    if(reponse == 'success')
+      _defer.resolve(response);
+    else
+      _defer.reject(response);
+  });
 
-// your express configuration here
-
-var httpServer = http.createServer(app);
-var httpsServer = https.createServer(credentials, app);
-
-httpServer.listen(80);
-httpsServer.listen(443);
-*/
+  return _defer.promise.timeout( 3000, "error" );
+}
