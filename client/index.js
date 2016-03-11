@@ -62,8 +62,9 @@ function pourDrink(drink) {
   var defer = q.defer();
 
   setTimeout(function() {
+    console.log("Okay done pouring");
     defer.resolve('okay');
-  }, 5000);
+  }, 15000);
 
   return defer.promise;
 }
