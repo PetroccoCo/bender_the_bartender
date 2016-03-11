@@ -50,8 +50,14 @@ alexaApp.intent("drinkIntent",
 	},
 	function(request,response) {
     var drink = request.slot('DRINK');
-    _socket.send("Pour", drink);
-		response.say("Okay, I'll make you a " + drink);
+
+    if( drinksMenu.indexOf(drink) >= 0 ) {
+      _socket.send(JSON.stringify({"drink": drink}));
+      response.say("Okay, I'll make you a " + drink);
+    }
+    else {
+      response.fail("Sorry, I don't know how to make a " + drink);
+    }
 	}
 );
 alexaApp.express(app, "/echo/", true);

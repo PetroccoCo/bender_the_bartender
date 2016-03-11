@@ -14,6 +14,13 @@ socket.on('connect', function(socket) {
 
 socket.on('message', function(message) {
   console.log("Message received is: ", message);
+  try {
+    var drink = JSON.parse(message);
+    console.log("DRINK", drink);
+  }
+  catch(ex) {
+    console.log("Error Parsing Message", ex);
+  }
 });
 
 setTimeout(function() {
