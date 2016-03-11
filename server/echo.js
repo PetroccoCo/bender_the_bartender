@@ -14,12 +14,12 @@ app.use(bodyParser.json());
 app.set('view engine','ejs');
 
 var drinksMenu = [
-  "Gin",
-  "Gin and Tonic",
-  "Gin Martini",
-  "Vodka",
-  "Vodka Martini",
-  "Vodka Tonic"
+  "gin",
+  "gin and tonic",
+  "gin martini",
+  "vodka",
+  "vodka martini",
+  "vodka tonic"
 ];
 
 var alexaApp = new alexa.app('bender');
@@ -50,13 +50,14 @@ alexaApp.intent("drinkIntent",
 	},
 	function(request,response) {
     var drink = request.slot('DRINK');
+    console.log("Drink is", drink, drinksMenu.indexOf(drink.toLowerCase()));
 
-    if( drinksMenu.indexOf(drink) >= 0 ) {
+    if( drinksMenu.indexOf(drink.toLowerCase()) >= 0 ) {
       _socket.send(JSON.stringify({"drink": drink}));
       response.say("Okay, I'll make you a " + drink);
     }
     else {
-      response.fail("Sorry, I don't know how to make a " + drink);
+      response.say("Sorry, I don't know how to make a " + drink);
     }
 	}
 );
