@@ -41,11 +41,14 @@ alexaApp.intent("drinkIntent",
 	{
 		"slots":{"DRINK":"LITERAL"}
 		,"utterances": [
-			"{make | pour} me a {drinks|DRINK}"
+			"make me a {drinks|DRINK}",
+      "pour me a {drinks|DRINK}"
 		]
 	},
 	function(request,response) {
-		response.say("Okay, I'll make you a " + request.slots.DRINK.value);
+    console.log(request.slots.DRINK);
+    response.say("Okay");
+		//response.say("Okay, I'll make you a " + request.slots.DRINK.value);
 	}
 );
 alexaApp.express(app, "/echo/", true);
