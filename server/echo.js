@@ -6,7 +6,7 @@ var alexa = require('alexa-app');
 var bodyParser = require('body-parser');
 var q = require('q');
 
-var _defer = q.defer();
+var _defer;
 var _socket;
 
 var app = express();
@@ -40,14 +40,13 @@ alexaApp.intent("drinkIntent",
 	},
 	function(request,response) {
     var drink = request.slot('DRINK');
-    console.log("Drink is", drink, drinksMenu.indexOf(drink.toLowerCase()));
 
     if( _socket === undefined || _socket.conn.disconnected) {
       response.say("Sorry there is no Bender to get your drink");
       return;
     }
 
-    if (_defer.promise.inspect().state === 'pending') {
+    if (_defer !== undefined && _defer.promise.inspect().state === 'pending') {
       response.say("Sorry, Bender is busy taking another order");
       return;
     }
@@ -124,6 +123,7 @@ httpServer.listen(PORT);
 console.log("Listening on port "+PORT);
 
 function drinkOrderMessageHandler(drink) {
+  _defer = q.defer();
   _socket.emit('drinkOrder', drink);
 
   _socket.on('benderResponse', function benderResponseHandler(reponse) {
@@ -134,5 +134,5 @@ function drinkOrderMessageHandler(drink) {
       _defer.reject(response);
   });
 
-  return _defer.promise.timeout( 3000, "error" );
+  return _defer.promise.timeout( 5000, "error" );
 }
