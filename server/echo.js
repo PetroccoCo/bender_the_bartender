@@ -159,5 +159,6 @@ function drinkOrderMessageHandler(drink) {
   _defer = q.defer();
   _socket.emit('drinkOrder', drink);
 
-  return _defer.promise.timeout( 30000, "timeout" );
+  // timeout has to be less than 30 seconds or alexa will timeout
+  return _defer.promise.timeout( 20000, "timeout" );
 }
