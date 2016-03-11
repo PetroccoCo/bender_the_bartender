@@ -9,9 +9,19 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.set('view engine','ejs');
 
+var drinksMenu = [
+  "Gin",
+  "Gin and Tonic",
+  "Gin Martini",
+  "Vodka",
+  "Vodka Martini",
+  "Vodka Tonic"
+];
+
+
 var alexaApp = new alexa.app('test');
 alexaApp.launch(function(request,response) {
-	response.say("You launched the app!");
+	response.say("Waiting to take your order and BE QUICK with it!!");
 });
 alexaApp.dictionary = {"names":["matt","joe","bob","bill","mary","jane","dawn"]};
 alexaApp.intent("nameIntent",
@@ -26,7 +36,19 @@ alexaApp.intent("nameIntent",
 		response.say("Success!");
 	}
 );
-alexaApp.express(app, "/echo/");
+alexaApp.dictionary = {"drinks":drinksMenu};
+alexaApp.intent("drinkIntent",
+	{
+		"slots":{"DRINK":"LITERAL"}
+		,"utterances": [
+			"{make | pour} me a {drink|DRINK}"
+		]
+	},
+	function(request,response) {
+		response.say("Okay, I'll make you a " + request.slots.DRINK.value);
+	}
+);
+alexaApp.express(app, "/echo/", true);
 
 // Launch /echo/test in your browser with a GET request!
 
