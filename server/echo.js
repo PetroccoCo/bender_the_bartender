@@ -4,7 +4,9 @@ var io = require('socket.io');
 var express = require('express');
 var alexa = require('alexa-app');
 var bodyParser = require('body-parser');
+var q = require('q');
 
+var _defer = q.defer();
 var _socket;
 
 var app = express();
@@ -26,19 +28,7 @@ var alexaApp = new alexa.app('bender');
 alexaApp.launch(function(request,response) {
 	response.say("Waiting to take your order and BE QUICK with it!!");
 });
-alexaApp.dictionary = {"names":["matt","joe","bob","bill","mary","jane","dawn"], "drinks" : drinksMenu};
-alexaApp.intent("nameIntent",
-	{
-		"slots":{"NAME":"LITERAL"}
-		,"utterances": [
-			"my {name is|name's} {names|NAME}"
-			,"set my name to {names|NAME}"
-		]
-	},
-	function(request,response) {
-		response.say("Success!");
-	}
-);
+alexaApp.dictionary = {"drinks" : drinksMenu};
 
 alexaApp.intent("drinkIntent",
 	{
@@ -51,6 +41,10 @@ alexaApp.intent("drinkIntent",
 	function(request,response) {
     var drink = request.slot('DRINK');
     console.log("Drink is", drink, drinksMenu.indexOf(drink.toLowerCase()));
+
+    console.log(_socket);
+
+//    if( !_socket 
 
     if( drinksMenu.indexOf(drink.toLowerCase()) >= 0 ) {
       // TODO this should be an async call and let the client be the end all be all of state.
