@@ -73,13 +73,16 @@ alexaApp.intent("drinkIntent",
                 message = "Shit! Something broke";
                 break;
             }
+            console.log("error message is", message);
             response.say(message);
           }
         );
     }
     else {
+      console.log("dont know how");
       response.say("Sorry, I don't know how to make a " + drink);
     }
+    return false;
 	}
 );
 alexaApp.express(app, "/echo/", true);
