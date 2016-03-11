@@ -60,10 +60,19 @@ alexaApp.intent("drinkIntent",
       drinkOrderMessageHandler(drink)
         .then(function domhSuccess(message) {
           console.log("Domh success");
-            response.say("Okay, I'll make you a " + drink);
+            response.say("Okay, I'll make you a " + drink).send();
           },
           function domhError(error) {
             console.log("domhError");
+
+            // it appers on a timeout that the promise is left in a pendig state, 
+            // and thus needs to be cleared
+            if(_defer.promise.isPending()) {
+              console.log("Clearing Promise manually");
+              _defer.reject();
+              return;
+            }
+
             switch(error) {
               case 'pouring':
                 message = "Hold your bits, Bender is pouring a drink";
@@ -74,7 +83,7 @@ alexaApp.intent("drinkIntent",
                 break;
             }
             console.log("error message is", message);
-            response.say(message);
+            response.say(message).send();
           }
         );
     }
