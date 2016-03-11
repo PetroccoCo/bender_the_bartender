@@ -53,6 +53,11 @@ alexaApp.intent("drinkIntent",
     console.log("Drink is", drink, drinksMenu.indexOf(drink.toLowerCase()));
 
     if( drinksMenu.indexOf(drink.toLowerCase()) >= 0 ) {
+      // TODO this should be an async call and let the client be the end all be all of state.
+      // send the drink request to the client and let it responsd with:
+      //  Success
+      //  Pooring
+      //  Error
       _socket.send(JSON.stringify({"drink": drink}));
       response.say("Okay, I'll make you a " + drink);
     }
