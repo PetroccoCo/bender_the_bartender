@@ -51,6 +51,8 @@ alexaApp.intent("drinkIntent",
       return;
     }
 
+    console.log("drink index", drink.toLowerCase(), drinksMenu.indexOf(drink.toLowerCase()));
+
     if( drinksMenu.indexOf(drink.toLowerCase()) >= 0 ) {
       // TODO this should be an async call and let the client be the end all be all of state.
       // send the drink request to the client and let it responsd with:
@@ -63,20 +65,23 @@ alexaApp.intent("drinkIntent",
             response.say("Okay, I'll make you a " + drink).send();
           },
           function domhError(error) {
-            console.log("domhError");
-
-            // it appers on a timeout that the promise is left in a pendig state, 
-            // and thus needs to be cleared
-            if(_defer.promise.isPending()) {
-              console.log("Clearing Promise manually");
-              _defer.reject();
-              return;
-            }
+            var message = '';
 
             switch(error) {
+              case 'timeout':
+                // it appers on a timeout that the promise is left in a pendig state, 
+                // and thus needs to be cleared
+                if(_defer.promise.isPending()) {
+                  console.log("Clearing Promise manually");
+                  _defer.reject();
+                }
+                message = "Bender Broken: timeout";
+                break;
+
               case 'pouring':
                 message = "Hold your bits, Bender is pouring a drink";
                 break;
+
               case 'error':
               default:
                 message = "Shit! Something broke";
@@ -89,7 +94,7 @@ alexaApp.intent("drinkIntent",
     }
     else {
       console.log("dont know how");
-      response.say("Sorry, I don't know how to make a " + drink);
+      response.say("Sorry, I don't know how to make a " + drink).send();
     }
     return false;
 	}
@@ -155,5 +160,5 @@ function drinkOrderMessageHandler(drink) {
     }
   });
 
-  return _defer.promise.timeout( 5000, "error" );
+  return _defer.promise.timeout( 5000, "timeout" );
 }
