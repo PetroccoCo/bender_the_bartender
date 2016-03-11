@@ -14,7 +14,7 @@ var drinksMenu = [
   "vodka tonic"
 ];
 
-console.log('2');
+var _pouring = false;
 
 // Add a connect listener
 socket.on('connect', function(socket) { 
@@ -34,6 +34,18 @@ socket.on('message', function(message) {
 
 socket.on('drinkOrder', function(drink) {
   console.log("Recieved drink order for " + drink);
+  if (_pouring) {
+    socket.emit('benderResponse', 'pouring');
+    return;
+  }
+
+  if( drinkMenu.indexOf(drink.toLowerCase()) >= 0) {
+    _pouring = true;
+    socket.emit('benderResponse', 'okay');
+  }
+  else {
+    socket.emit('benderResponse', 'error');
+  }
 });
 
 setTimeout(function() {

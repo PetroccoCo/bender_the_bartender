@@ -51,14 +51,7 @@ alexaApp.intent("drinkIntent",
       return;
     }
 
-    console.log("drink index", drink.toLowerCase(), drinksMenu.indexOf(drink.toLowerCase()));
-
     if( drinksMenu.indexOf(drink.toLowerCase()) >= 0 ) {
-      // TODO this should be an async call and let the client be the end all be all of state.
-      // send the drink request to the client and let it responsd with:
-      //  Success
-      //  Pooring
-      //  Error
       drinkOrderMessageHandler(drink)
         .then(function domhSuccess(message) {
           console.log("Domh success");
@@ -154,7 +147,7 @@ function drinkOrderMessageHandler(drink) {
     console.log("removing response listener");
     _socket.off('benderResponse');
     console.log("removing response listener 2");
-    if(reponse == 'success'){
+    if(reponse == 'okay'){
       console.log("resolving");
       _defer.resolve(response);
     }
@@ -164,5 +157,5 @@ function drinkOrderMessageHandler(drink) {
     }
   });
 
-  return _defer.promise.timeout( 5000, "timeout" );
+  return _defer.promise.timeout( 30000, "timeout" );
 }
