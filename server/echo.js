@@ -1,4 +1,6 @@
 // Start up the server
+var http = require('http');
+var io = require('socket.io');
 var express = require('express');
 var alexa = require('alexa-app');
 var bodyParser = require('body-parser');
@@ -17,7 +19,6 @@ var drinksMenu = [
   "Vodka Martini",
   "Vodka Tonic"
 ];
-
 
 var alexaApp = new alexa.app('bender');
 alexaApp.launch(function(request,response) {
@@ -46,9 +47,7 @@ alexaApp.intent("drinkIntent",
 		]
 	},
 	function(request,response) {
-    console.log(request.slots.DRINK);
-    response.say("Okay");
-		//response.say("Okay, I'll make you a " + request.slots.DRINK.value);
+		response.say("Okay, I'll make you a " + request.slot('DRINK'));
 	}
 );
 alexaApp.express(app, "/echo/", true);
@@ -69,9 +68,28 @@ if( process.env.ssl == 'enabled' ) {
 
   httpsServer.listen(443);
   console.log("Listneing on https 443");
+
+  // Socket Listener
+  io = io.listen(httpsServer);
+
+  // Add a connect listener
+  io.sockets.on('connection', function(socket)
+  {
+    console.log('Client connected.');
+
+    socket.on('message', function(message) {
+      console.log("Message Recieved", message);
+    });
+
+    // Disconnect listener
+    socket.on('disconnect', function() {
+    console.log('Client disconnected.');
+    });
+  });
 }
 
-app.listen(PORT);
+var httpServer = http.createServer(app);
+httpServer.listen(PORT);
 console.log("Listening on port "+PORT);
 
 /*
