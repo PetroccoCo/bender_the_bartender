@@ -23,7 +23,7 @@ var alexaApp = new alexa.app('bender');
 alexaApp.launch(function(request,response) {
 	response.say("Waiting to take your order and BE QUICK with it!!");
 });
-alexaApp.dictionary = {"names":["matt","joe","bob","bill","mary","jane","dawn"]};
+alexaApp.dictionary = {"names":["matt","joe","bob","bill","mary","jane","dawn"], "drinks" : drinksMenu};
 alexaApp.intent("nameIntent",
 	{
 		"slots":{"NAME":"LITERAL"}
@@ -36,12 +36,12 @@ alexaApp.intent("nameIntent",
 		response.say("Success!");
 	}
 );
-alexaApp.dictionary = {"drinks":drinksMenu};
+
 alexaApp.intent("drinkIntent",
 	{
 		"slots":{"DRINK":"LITERAL"}
 		,"utterances": [
-			"{make | pour} me a {drink|DRINK}"
+			"{make | pour} me a {drinks|DRINK}"
 		]
 	},
 	function(request,response) {
