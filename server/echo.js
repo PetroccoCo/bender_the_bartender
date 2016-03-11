@@ -19,7 +19,7 @@ var drinksMenu = [
 ];
 
 
-var alexaApp = new alexa.app('test');
+var alexaApp = new alexa.app('bender');
 alexaApp.launch(function(request,response) {
 	response.say("Waiting to take your order and BE QUICK with it!!");
 });
