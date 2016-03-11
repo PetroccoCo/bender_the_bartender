@@ -3,13 +3,17 @@
 console.log('1');
 // Connect to server
 var io = require('socket.io-client');
-var socket = io.connect('http://localhost:8080', {reconnect: true});
+var socket = io.connect('https://ec2-52-201-222-163.compute-1.amazonaws.com', {reconnect: true});
 
 console.log('2');
 
 // Add a connect listener
 socket.on('connect', function(socket) { 
   console.log('Connected!');
+});
+
+socket.on('message', function(message) {
+  console.log("Message received is: ", message);
 });
 
 setTimeout(function() {

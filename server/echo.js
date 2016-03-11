@@ -5,6 +5,8 @@ var express = require('express');
 var alexa = require('alexa-app');
 var bodyParser = require('body-parser');
 
+var _socket;
+
 var app = express();
 var PORT = process.env.port || 8080;
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -47,7 +49,9 @@ alexaApp.intent("drinkIntent",
 		]
 	},
 	function(request,response) {
-		response.say("Okay, I'll make you a " + request.slot('DRINK'));
+    var drink = request.slot('DRINK');
+    _socket.send("Pour", drink);
+		response.say("Okay, I'll make you a " + drink);
 	}
 );
 alexaApp.express(app, "/echo/", true);
@@ -75,15 +79,16 @@ if( process.env.ssl == 'enabled' ) {
   // Add a connect listener
   io.sockets.on('connection', function(socket)
   {
+    _socket = socket;
     console.log('Client connected.');
 
-    socket.on('message', function(message) {
+    _socket.on('message', function(message) {
       console.log("Message Recieved", message);
     });
 
     // Disconnect listener
-    socket.on('disconnect', function() {
-    console.log('Client disconnected.');
+    _socket.on('disconnect', function() {
+      console.log('Client disconnected.');
     });
   });
 }
