@@ -42,9 +42,10 @@ alexaApp.intent("drinkIntent",
     var drink = request.slot('DRINK');
     console.log("Drink is", drink, drinksMenu.indexOf(drink.toLowerCase()));
 
-    console.log(_socket);
-
-//    if( !_socket 
+    if( _socket === undefined || _socket.conn.disconnected) {
+      response.say("Sorry there is no bender to get your drink");
+      return;
+    }
 
     if( drinksMenu.indexOf(drink.toLowerCase()) >= 0 ) {
       // TODO this should be an async call and let the client be the end all be all of state.
