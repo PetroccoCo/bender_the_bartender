@@ -59,12 +59,25 @@ setTimeout(function() {
   }, 1500);
 
 function pourDrink(drink) {
-  var defer = q.defer();
+  var defer = q.defer(),
+      http = require('http');
 
-  setTimeout(function() {
-    console.log("Okay done pouring");
-    defer.resolve('okay');
-  }, 15000);
+  var request = http.get('localhost:8080/ws/drink/2?booze1=75', function (response) {
+    // Continuously update stream with data
+        var body = '';
+        response.on('data', function(d) {
+          console.log("HTTP Client Data Received");
+          body += d;
+        });
+        response.on('end', function() {
+            console.log("http get end");
+            defer.resolve('okay');
+        });
+  });
+
+  request.setTimeout(60000, function() {
+    console.log("Http Client Timeout Reached");
+  });
 
   return defer.promise;
 }
