@@ -5,6 +5,7 @@ console.log('1');
 var io = require('socket.io-client');
 var socket = io.connect('https://ec2-52-201-222-163.compute-1.amazonaws.com', {reconnect: true});
 var q = require('q');
+var _bartendroIp = process.env.ip || '192.168.55.77';
 
 var drinksMenu = [
   "gin",
@@ -62,7 +63,7 @@ function pourDrink(drink) {
   var defer = q.defer(),
       http = require('http');
 
-  var request = http.get('localhost:8080/ws/drink/2?booze1=75', function (response) {
+  var request = http.get('http://' + _bartendroIp + ':8080/ws/drink/2?booze1=75', function (response) {
     // Continuously update stream with data
         var body = '';
         response.on('data', function(d) {
