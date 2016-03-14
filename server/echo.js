@@ -21,7 +21,9 @@ var drinksMenu = [
   "gin martini",
   "vodka",
   "vodka martini",
-  "vodka tonic"
+  "vodka tonic",
+  "gimlet",
+  "manhattan"
 ];
 
 var alexaApp = new alexa.app('bender');

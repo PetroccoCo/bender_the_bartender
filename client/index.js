@@ -13,17 +13,20 @@ var drinksMenu = [
   "gin martini",
   "vodka",
   "vodka martini",
-  "vodka tonic"
+  "vodka tonic",
+  "gimlet",
+  "manhattan"
 ];
 
 var drinksObj = {
   'gin': '2?booze1=150',
   'gin and tonic': '2?booze1=150',
-  'vodka': '2?booze1=150',
-  'vodka tonic': '2?booze1=150',
-  'gin martini': '2?booze1=150',
-  'vodka martini': '2?booze1=150',
+  'vodka': '2?booze2=150',
+  'vodka tonic': '2?booze2=150',
+  'gin martini': '2?booze1=150&booze6=50',
+  'vodka martini': '2?booze2=150&booze6=50',
   'gimlet': '2?booze1=150',
+  'manhattan': '2?booze3=150&booze5=75'
 };
 
 var _pouring = false;
