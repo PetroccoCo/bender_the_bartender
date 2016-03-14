@@ -16,6 +16,16 @@ var drinksMenu = [
   "vodka tonic"
 ];
 
+var drinksObj = {
+  'gin': '2?booze1=150',
+  'gin and tonic': '2?booze1=150',
+  'vodka': '2?booze1=150',
+  'vodka tonic': '2?booze1=150',
+  'gin martini': '2?booze1=150',
+  'vodka martini': '2?booze1=150',
+  'gimlet': '2?booze1=150',
+};
+
 var _pouring = false;
 
 // Add a connect listener
@@ -63,7 +73,7 @@ function pourDrink(drink) {
   var defer = q.defer(),
       http = require('http');
 
-  var request = http.get('http://' + _bartendroIp + ':8080/ws/drink/2?booze1=75', function (response) {
+  var request = http.get('http://' + _bartendroIp + ':8080/ws/drink/' + drinksObj[drink], function (response) {
     // Continuously update stream with data
         var body = '';
         response.on('data', function(d) {
